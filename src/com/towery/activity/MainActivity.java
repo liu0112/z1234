@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
 				Intent intent = new Intent();
 				intent.setClass(MainActivity.this, ZhuActivity.class);
 				startActivity(intent);
-				
+				System.out.println("");
 				
 			}
 		});
