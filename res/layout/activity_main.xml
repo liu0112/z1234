@@ -3,8 +3,8 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00CCFF"
     android:orientation="vertical"
-    android:background="@drawable/t0127c45a8e3188f139"
     tools:context=".MainActivity" >
 
     <LinearLayout
@@ -19,17 +19,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="欢迎使用POI采集系统"
-            android:textSize="96px" />
+            android:text="@string/title_login_welcome"
+            android:textSize="36sp" />
 
         <TextView
             android:id="@+id/textView2_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20px"
-            android:text="系统登录"
-            android:textSize="96px" />
+            android:layout_marginTop="20dp"
+            android:text="@string/title_login_xtdl"
+            android:textSize="26sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,14 +42,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="50px" >
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp" >
 
             <TextView
-                android:id="@+id/textView3_main"
+                android:id="@+id/textView_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="用户编号:"
-                android:textSize="96px" />
+                android:text="@string/title_login_user_name"
+                android:textSize="26sp" />
 
             <Spinner
                 android:id="@+id/spinner1_main"
@@ -60,17 +61,45 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="50px" >
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="20dp" >
 
             <TextView
-                android:id="@+id/textView3_main"
+                android:id="@+id/textView3_user_pwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="密        码:"
-                android:textSize="96px" />
+                android:text="@string/title_login_user_pwd"
+                android:textSize="26sp" />
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPassword" >
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="20dp" >
+
+            <TextView
+                android:id="@+id/textView3_task_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_login_task_num"
+                android:textSize="26sp" />
 
             <Spinner
-                android:id="@+id/spinner2_main"
+                android:id="@+id/spinner3_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -78,19 +107,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="50px" >
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
+            android:paddingTop="150dp" >
 
-            <TextView
-                android:id="@+id/textView3_main"
+            <Button
+                android:id="@+id/button1_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="任务编号:"
-                android:textSize="96px" />
+                android:text="@string/btn_login_ok"
+                android:textSize="26sp" />
 
-            <Spinner
-                android:id="@+id/spinner3_main"
+            <TextView
+                android:id="@+id/textView4_main"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="" />
+
+            <Button
+                android:id="@+id/button2_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="@string/btn_login_cancel"
+                android:textSize="26sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -99,34 +140,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/button1_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20px"
-            android:textSize="72px"
-            android:text="确定" />
-
-        <TextView
-            android:id="@+id/textView4_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="" />
-
-        <Button
-            android:id="@+id/button2_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20px"
-            android:textSize="72px"
-            android:text="取消" />
     </LinearLayout>
 
 </LinearLayout>

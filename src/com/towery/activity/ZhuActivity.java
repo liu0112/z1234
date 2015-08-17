@@ -176,15 +176,11 @@ public class ZhuActivity extends Activity {
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
 				return false;
-				// ��������true�Ļ���touch�¼���������
-				// ���غ�
-				// PopupWindow��onTouchEvent�������ã��������ⲿ�����޷�dismiss
 			}
 		});
-		// �������PopupWindow�ı����������ǵ���ⲿ������Back���޷�dismiss����
 		popupWindow1.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.t0127c45a8e3188f139));
-		popupWindow1.setWidth(680);
+				R.drawable.bg_popwindow));
+		popupWindow1.setWidth(250);
 		popupWindow1.showAsDropDown(view);
 	}
 
@@ -243,8 +239,8 @@ public class ZhuActivity extends Activity {
 			}
 		});
 		popupWindow2.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.t0127c45a8e3188f139));
-		popupWindow2.setWidth(580);
+				R.drawable.bg_popwindow));
+		popupWindow2.setWidth(220);
 		popupWindow2.showAsDropDown(view, 0, 3);
 	}
 
