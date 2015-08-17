@@ -8,4 +8,15 @@
     <string name="title_activity_cj">CJActivity</string>
     <string name="title_activity_tpyl">TPYLActivity</string>
 
+    
+    <string name="title_login_welcome">欢迎使用POI采集系统</string>
+    <string name="title_login_xtdl">系统登录</string>
+    <string name="title_login_user_name">用户编号</string>
+    <string name="title_login_user_pwd">密                 码</string>
+    <string name="title_login_task_num">任务编号</string>
+    <string name="btn_login_ok">确定</string>
+    <string name="btn_login_cancel">取消</string>
+
+    
+    
 </resources>
