@@ -5,18 +5,13 @@ import java.util.List;
 
 import service.GpsService;
 import service.IGpsBinder;
-
 import com.example.poi.R;
-import com.example.poi.R.layout;
-import com.example.poi.R.menu;
 import com.towery.beans.SetUp;
 import com.towery.beans.userinfo;
 import com.towery.database.DataBaseHandler;
 import com.towery.database.SDDataBaseHandler;
-import com.towery.database.SQLiteHelper;
+import com.towery.utils.Keys;
 
-import android.R.string;
-import android.hardware.Camera.ShutterCallback;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -40,7 +35,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class ZhuActivity extends Activity {
@@ -55,9 +49,43 @@ public class ZhuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_zhu);
-		final ServiceConnection connection = new ServiceConnection() {
 
-			
+		init();
+		initframe();
+//		 SDDataBaseHandler sdhandler = new
+//		 SDDataBaseHandler(ZhuActivity.this);
+//		 ArrayList<userinfo> sdlist = new ArrayList<userinfo>();
+//		 userinfo userinfo = new userinfo();
+//		 userinfo.setRecNo("0");
+//		 userinfo.setUserid("0");
+//		 userinfo.setUsername("0");
+//		 userinfo.setUserpswd("0");
+//		 sdlist.add(userinfo);
+//		 sdhandler.insert(sdlist);
+//		 List<userinfo> sdlist2 = sdhandler.query1();
+//		 System.out.println("=======" + sdlist2.toString());
+//		 DataBaseHandler handler = new DataBaseHandler(ZhuActivity.this);
+//		 ArrayList<SetUp> list = new ArrayList<SetUp>();
+//		 SetUp setUp = new SetUp();
+//		 setUp.setDjms("djms");
+//		 setUp.setTzms("tzms");
+//		 setUp.setDwrwq("dwrwq");
+//		 setUp.setXzbz("xzbz");
+//		 setUp.setXsbz("xsbz");
+//		 setUp.setQhrwdw("qhrwdw");
+//		 setUp.setXspz("xspz");
+//		 setUp.setSjkgx("sukgx");
+//		 setUp.setSjkgx("sujgx");
+//		 list.add(setUp);
+//		 handler.insert(list);
+//		 ArrayList<SetUp> list2 = handler.query();
+//		 System.out.println("==" + list2.toString());
+
+	}
+
+	// 初始化
+	public void init() {
+		final ServiceConnection connection = new ServiceConnection() {
 
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
@@ -72,43 +100,19 @@ public class ZhuActivity extends Activity {
 			@Override
 			public void onServiceDisconnected(ComponentName name) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 		};
+
 		Intent i = new Intent(ZhuActivity.this, GpsService.class);
 		ZhuActivity.this.bindService(i, connection, Context.BIND_AUTO_CREATE);
-		
-
-		// SDDataBaseHandler sdhandler = new
-		// SDDataBaseHandler(ZhuActivity.this);
-		// ArrayList<userinfo> sdlist = new ArrayList<userinfo>();
-		// userinfo userinfo = new userinfo();
-		// userinfo.setRecNo("0");
-		// userinfo.setUserid("0");
-		// userinfo.setUsername("0");
-		// userinfo.setUserpswd("0");
-		// sdlist.add(userinfo);
-		// sdhandler.insert(sdlist);
-		// List<userinfo> sdlist2 = sdhandler.query();
-		// System.out.println("=======" + sdlist2.toString());
-		// DataBaseHandler handler = new DataBaseHandler(ZhuActivity.this);
-		// ArrayList<SetUp> list = new ArrayList<SetUp>();
-		// SetUp setUp = new SetUp();
-		// setUp.setDjms("djms");
-		// setUp.setTzms("tzms");
-		// setUp.setDwrwq("dwrwq");
-		// setUp.setXzbz("xzbz");
-		// setUp.setXsbz("xsbz");
-		// setUp.setQhrwdw("qhrwdw");
-		// setUp.setXspz("xspz");
-		// setUp.setSjkgx("sukgx");
-		// setUp.setSjkgx("sujgx");
-		// list.add(setUp);
-		// handler.insert(list);
-		// ArrayList<SetUp> list2 = handler.query();
-		// System.out.println("==" + list2.toString());
 		but1 = (Button) findViewById(R.id.button1_zhu);
+		but2 = (Button) findViewById(R.id.button2_zhu);
+		imgbut1 = (ImageButton) findViewById(R.id.imageButton1_zhu);
+	}
+// 事件操作
+	public void initframe() {
 		but1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -117,29 +121,28 @@ public class ZhuActivity extends Activity {
 				showPopupWindow1(v);
 			}
 		});
-		but2 = (Button) findViewById(R.id.button2_zhu);
+
 		but2.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				showPopupWindow2(v);
+				showPopupWindowBD(v);
 			}
 		});
-		imgbut1 = (ImageButton) findViewById(R.id.imageButton1_zhu);
+
 		imgbut1.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				System.out.println("==============");
-//				Intent intent = new Intent(ZhuActivity.this, GpsService.class);				
-//				startService(intent);
 				mBinder.bindService(ZhuActivity.this);
 			}
 		});
 	}
 
+	// 高级弹出菜单
 	public void showPopupWindow1(View view) {
 		View contentView = LayoutInflater.from(this).inflate(
 				R.layout.popupwindow1, null);
@@ -184,48 +187,228 @@ public class ZhuActivity extends Activity {
 		popupWindow1.showAsDropDown(view);
 	}
 
-	public void showPopupWindow2(View view) {
+	// 被动PDA弹出菜单
+	public void showPopupWindowZJ(View view) {
 
-		View contentView2 = LayoutInflater.from(this).inflate(
+		View contentView = LayoutInflater.from(this).inflate(
 				R.layout.popupwindow2, null);
-		final PopupWindow popupWindow2 = new PopupWindow(contentView2,
+		final PopupWindow popupWindow2 = new PopupWindow(contentView,
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
-		ListView list2 = (ListView) contentView2
-				.findViewById(R.id.listView1_pp2);
-		ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
+		ListView list = (ListView) contentView.findViewById(R.id.listView1_pp2);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				ZhuActivity.this, android.R.layout.simple_list_item_1);
-		adapter2.add("定位任务区");
-		adapter2.add("采集");
-		adapter2.add("编辑");
-		adapter2.add("任务列表");
-		adapter2.add("完成");
-		adapter2.add("退出");
-		list2.setAdapter(adapter2);
-		list2.setOnItemClickListener(new OnItemClickListener() {
+		adapter.add(Keys.ZJ_POILB);
+		adapter.add(Keys.ZJ_DWRWQ);
+		adapter.add(Keys.ZJ_CJ);
+		adapter.add(Keys.ZJ_ZJDZ);
+		adapter.add(Keys.ZJ_BJ);
+		adapter.add(Keys.ZJ_RWLB);
+		adapter.add(Keys.ZJ_WC);
+		list.setAdapter(adapter);
+
+		list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
-				switch (arg2) {
-				case 0:
 
-					break;
-				case 1:
+				if (adapter.getItem(arg2) == Keys.ZJ_POILB) {
+
+				} else if (adapter.getItem(arg2) == Keys.ZJ_DWRWQ) {
+
+				} else if (adapter.getItem(arg2) == Keys.ZJ_CJ) {
 					Intent i2 = new Intent(ZhuActivity.this, CJActivity.class);
 					startActivity(i2);
-					popupWindow2.dismiss();
-					break;
-				case 2:
+				} else if (adapter.getItem(arg2) == Keys.ZJ_ZJDZ) {
 
-					break;
-				case 3:
+				} else if (adapter.getItem(arg2) == Keys.ZJ_BJ) {
 
-					break;
-				default:
-					break;
+				} else if (adapter.getItem(arg2) == Keys.ZJ_RWLB) {
+
+				} else if (adapter.getItem(arg2) == Keys.ZJ_WC) {
+
 				}
+				popupWindow2.dismiss();
 
+			}
+		});
+
+		popupWindow2.setTouchable(true);
+		popupWindow2.setTouchInterceptor(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		popupWindow2.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.bg_popwindow));
+		popupWindow2.setWidth(220);
+		popupWindow2.showAsDropDown(view, 0, 3);
+	}
+
+	// 废弃PDA弹出菜单
+	public void showPopupWindowFQ(View view) {
+
+		View contentView = LayoutInflater.from(this).inflate(
+				R.layout.popupwindow2, null);
+		final PopupWindow popupWindow2 = new PopupWindow(contentView,
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+		ListView list = (ListView) contentView.findViewById(R.id.listView1_pp2);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				ZhuActivity.this, android.R.layout.simple_list_item_1);
+		adapter.add(Keys.FQ_POILB);
+		adapter.add(Keys.FQ_DWRWQ);
+		adapter.add(Keys.FQ_CJ);
+		adapter.add(Keys.FQ_FQDZ);
+		adapter.add(Keys.FQ_BJ);
+		adapter.add(Keys.FQ_RWLB);
+		adapter.add(Keys.FQ_WC);
+		list.setAdapter(adapter);
+
+		list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+
+				if (adapter.getItem(arg2) == Keys.FQ_POILB) {
+
+				} else if (adapter.getItem(arg2) == Keys.FQ_DWRWQ) {
+
+				} else if (adapter.getItem(arg2) == Keys.FQ_CJ) {
+					Intent i2 = new Intent(ZhuActivity.this, CJActivity.class);
+					startActivity(i2);
+				} else if (adapter.getItem(arg2) == Keys.FQ_FQDZ) {
+
+				} else if (adapter.getItem(arg2) == Keys.FQ_BJ) {
+
+				} else if (adapter.getItem(arg2) == Keys.FQ_RWLB) {
+
+				} else if (adapter.getItem(arg2) == Keys.FQ_WC) {
+
+				}
+				popupWindow2.dismiss();
+
+			}
+		});
+
+		popupWindow2.setTouchable(true);
+		popupWindow2.setTouchInterceptor(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		popupWindow2.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.bg_popwindow));
+		popupWindow2.setWidth(220);
+		popupWindow2.showAsDropDown(view, 0, 3);
+	}
+
+	// 被动PDA弹出菜单
+	public void showPopupWindowBD(View view) {
+
+		View contentView = LayoutInflater.from(this).inflate(
+				R.layout.popupwindow2, null);
+		final PopupWindow popupWindow2 = new PopupWindow(contentView,
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+		ListView list = (ListView) contentView.findViewById(R.id.listView1_pp2);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				ZhuActivity.this, android.R.layout.simple_list_item_1);
+		adapter.add(Keys.BD_POILB);
+		adapter.add(Keys.BD_DWRWQ);
+		adapter.add(Keys.BD_CJ);
+		adapter.add(Keys.BD_BDDZ);
+		adapter.add(Keys.BD_BJ);
+		adapter.add(Keys.BD_RWLB);
+		adapter.add(Keys.BD_WC);
+		list.setAdapter(adapter);
+
+		list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+
+				if (adapter.getItem(arg2) == Keys.BD_POILB) {
+
+				} else if (adapter.getItem(arg2) == Keys.BD_DWRWQ) {
+
+				} else if (adapter.getItem(arg2) == Keys.BD_CJ) {
+					Intent i2 = new Intent(ZhuActivity.this, CJActivity.class);
+					startActivity(i2);
+				} else if (adapter.getItem(arg2) == Keys.BD_BDDZ) {
+
+				} else if (adapter.getItem(arg2) == Keys.BD_BJ) {
+
+				} else if (adapter.getItem(arg2) == Keys.BD_RWLB) {
+
+				} else if (adapter.getItem(arg2) == Keys.BD_WC) {
+
+				}
+				popupWindow2.dismiss();
+
+			}
+		});
+
+		popupWindow2.setTouchable(true);
+		popupWindow2.setTouchInterceptor(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		popupWindow2.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.bg_popwindow));
+		popupWindow2.setWidth(220);
+		popupWindow2.showAsDropDown(view, 0, 3);
+	}
+
+	// 主动PDA
+	public void showPopupWindowZD(View view) {
+
+		View contentView = LayoutInflater.from(this).inflate(
+				R.layout.popupwindow2, null);
+		final PopupWindow popupWindow2 = new PopupWindow(contentView,
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+		ListView list = (ListView) contentView.findViewById(R.id.listView1_pp2);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				ZhuActivity.this, android.R.layout.simple_list_item_1);
+		adapter.add(Keys.ZD_DWRWQ);
+		adapter.add(Keys.ZD_CJ);
+		adapter.add(Keys.ZD_BJ);
+		adapter.add(Keys.ZD_RWLB);
+		adapter.add(Keys.ZD_WC);
+		list.setAdapter(adapter);
+
+		list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				if (adapter.getItem(arg2) == Keys.ZD_DWRWQ) {
+
+				} else if (adapter.getItem(arg2) == Keys.ZD_CJ) {
+					Intent i2 = new Intent(ZhuActivity.this, CJActivity.class);
+					startActivity(i2);
+				} else if (adapter.getItem(arg2) == Keys.ZD_BJ) {
+
+				} else if (adapter.getItem(arg2) == Keys.ZD_RWLB) {
+
+				} else if (adapter.getItem(arg2) == Keys.ZD_WC) {
+
+				}
+				popupWindow2.dismiss();
 			}
 		});
 
@@ -250,7 +433,7 @@ public class ZhuActivity extends Activity {
 		getMenuInflater().inflate(R.menu.zhu, menu);
 		return true;
 	}
-
+    //反射监听
 	public void locationChanged(Location loc) {
 		System.out.println("=============+");
 		updateWithNewLocation(loc);
@@ -259,7 +442,7 @@ public class ZhuActivity extends Activity {
 	// Gps监听器调用，处理位置信息
 	private void updateWithNewLocation(Location location) {
 		String latLongString;
-		
+
 		if (location != null) {
 			double lat = location.getLatitude();
 			double lng = location.getLongitude();
@@ -267,8 +450,9 @@ public class ZhuActivity extends Activity {
 		} else {
 			latLongString = "无法获取地理信息";
 		}
-		System.out.println("================"+ "您当前的位置是:/n" + latLongString);
-		Toast.makeText(ZhuActivity.this, "您当前的位置是:/n" + latLongString, Toast.LENGTH_SHORT).show();
-		
+		System.out.println("================" + "您当前的位置是:/n" + latLongString);
+		Toast.makeText(ZhuActivity.this, "您当前的位置是:/n" + latLongString,
+				Toast.LENGTH_SHORT).show();
+
 	}
 }

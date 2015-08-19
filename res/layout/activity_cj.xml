@@ -14,11 +14,11 @@
             android:id="@+id/button1_cj"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拍照" />
+            android:text="@string/btn_CJ_Photograph" />
 
         <TextView
             android:id="@+id/textView1_cj"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
            />
@@ -27,12 +27,12 @@
             android:id="@+id/button2_cj"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="完成" />
+            android:text="@string/btn_CJ_finish" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical" >
 
@@ -45,16 +45,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300px"
+        android:layout_height="300dp"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textView2_cj"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="36px"
+            android:textSize="36sp"
             android:gravity="center"
-            android:text="备注" />
+            android:text="@string/btn_CJ_remark" />
 
         <EditText
             android:id="@+id/editText1_cj"

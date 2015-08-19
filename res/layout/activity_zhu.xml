@@ -13,23 +13,22 @@
 
         <TextView
             android:id="@+id/textView1_zhu"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="PDA设备"
-            android:textSize="36px" />
+            android:textSize="36sp" />
 
         <Button
             android:id="@+id/button1_zhu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="高级" />
+            android:text="@string/but_zhu_set" />
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1" >
 
     
@@ -41,8 +40,7 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="30dp"
             android:layout_marginLeft="30dp"
-            android:background="@drawable/icon_select_point" 
-             />
+            android:background="@drawable/icon_select_point"/>
        
     </FrameLayout>
 
@@ -54,21 +52,20 @@
             android:id="@+id/button2_zhu"
             android:layout_width="150dp"
             android:layout_height="wrap_content"        
-            android:text="菜单" />
+            android:text="@string/btn_zhu_menu" />
 
         <TextView
             android:id="@+id/textView2_zhu"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="1：200" />
+            android:gravity="center" />
 
         <Button
             android:id="@+id/button3_zhu"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="取消" />
+            android:text="@string/btn_zhu_remove" />
     </LinearLayout>
 
 </LinearLayout>

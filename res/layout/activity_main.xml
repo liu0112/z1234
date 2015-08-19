@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/title_login_welcome"
-            android:textSize="36sp" />
+            android:textSize="26sp" />
 
         <TextView
             android:id="@+id/textView2_main"
@@ -99,7 +99,7 @@
                 android:textSize="26sp" />
 
             <Spinner
-                android:id="@+id/spinner3_main"
+                android:id="@+id/spinner2_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

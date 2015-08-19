@@ -16,7 +16,15 @@
     <string name="title_login_task_num">任务编号</string>
     <string name="btn_login_ok">确定</string>
     <string name="btn_login_cancel">取消</string>
-
     
+    
+    
+    <string name="btn_zhu_menu">菜单</string>
+    <string name="btn_zhu_remove">取消</string>
+    <string name="but_zhu_set">高级</string>
+
+    <string name="btn_CJ_Photograph">拍照</string>
+    <string name="btn_CJ_finish">完成</string>
+    <string name="btn_CJ_remark">备注</string>
     
 </resources>

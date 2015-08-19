@@ -54,13 +54,51 @@ public class CJActivity extends Activity {
 	private ArrayList<String> arrayList2;
 	private ListView listview;
 	private MyAdapter adapter;
+	private Button but1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_cj);
-		Button but1 = (Button) findViewById(R.id.button1_cj);
+        init();
+        initframe();
+	}
+
+	public void init() {
+		but1 = (Button) findViewById(R.id.button1_cj);
+		listview = (ListView) findViewById(R.id.listView1_cj);
+		arrayList1 = new ArrayList<Bitmap>();
+		arrayList2 = new ArrayList<String>();
+		adapter = new MyAdapter();
+		String sdStatus = Environment.getExternalStorageState();
+		if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // ï¿½ï¿½ï¿½sdï¿½Ç·ï¿½ï¿½ï¿½ï¿½
+			Log.v("TestFile", "SD card is not avaiable/writeable right now.");
+			return;
+		}
+		String fileName = Keys.SDURL + "myImage";
+		File file = new File(fileName);
+		if (!file.exists()) {
+			System.out.println("=============" + fileName);
+			file.mkdir(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò´´½ï¿½
+			System.out.println(file.exists());
+		} else {
+			File[] files = file.listFiles();
+			System.out.println(files.length);
+			for (int i = 0; i < files.length; i++) {
+				File f = files[i];
+				arrayList2.add(f.toString());
+				if (f.exists()) {// ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+					Bitmap bm = BitmapFactory.decodeFile(f.toString());
+					arrayList1.add(bm);
+				}
+			}
+			listview.setAdapter(adapter);// åˆå§‹åŒ–ç…§ç‰‡åˆ—è¡¨
+		}
+	}
+//äº‹ä»¶æ“ä½œ
+	public void initframe() {
+		// ç‰Œç…§æŒ‰éˆ•
 		but1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -70,11 +108,8 @@ public class CJActivity extends Activity {
 				startActivityForResult(intent, 1);
 			}
 		});
-		arrayList1 = new ArrayList<Bitmap>();
-		arrayList2 = new ArrayList<String>();
-		listview = (ListView) findViewById(R.id.listView1_cj);
-		adapter = new MyAdapter();
 
+		// ç…§ç‰‡åˆ—è¡¨ç‚¹å‡»äº‹ä»¶
 		listview.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -85,33 +120,9 @@ public class CJActivity extends Activity {
 				showPopupWindow(arg0, arg2);
 			}
 		});
-		String sdStatus = Environment.getExternalStorageState();
-		if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // ¼ì²âsdÊÇ·ñ¿ÉÓÃ
-			Log.v("TestFile", "SD card is not avaiable/writeable right now.");
-			return;
-		}
-		String fileName = Keys.SDURL + "myImage";
-		File file = new File(fileName);
-		if (!file.exists()) {
-			System.out.println("============="+fileName);
-			file.mkdir(); // Èç¹û²»´æÔÚÔò´´½¨
-			System.out.println(file.exists());
-		} else {
-			File[] files = file.listFiles();
-			System.out.println(files.length);
-			for (int i = 0; i < files.length; i++) {
-				File f = files[i];
-				arrayList2.add(f.toString());
-				if (f.exists()) {// Èô¸ÃÎÄ¼þ´æÔÚ
-					Bitmap bm = BitmapFactory.decodeFile(f.toString());
-					arrayList1.add(bm);
-				}
-			}
-			listview.setAdapter(adapter);
-		}
-
 	}
 
+	// èŽ·å–ç›¸æœºè¿”å›žç…§ç‰‡
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
@@ -119,23 +130,23 @@ public class CJActivity extends Activity {
 		if (resultCode == Activity.RESULT_OK) {
 
 			String sdStatus = Environment.getExternalStorageState();
-			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // ¼ì²âsdÊÇ·ñ¿ÉÓÃ
+			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // ï¿½ï¿½ï¿½sdï¿½Ç·ï¿½ï¿½ï¿½ï¿½
 				Log.v("TestFile",
 						"SD card is not avaiable/writeable right now.");
 				return;
 			}
 
 			Bundle bundle = data.getExtras();
-			Bitmap ybitmap = (Bitmap) bundle.get("data");// »ñÈ¡Ïà»ú·µ»ØµÄÊý¾Ý£¬²¢×ª»»ÎªBitmapÍ¼Æ¬¸ñÊ½
+			Bitmap ybitmap = (Bitmap) bundle.get("data");// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½×ªï¿½ï¿½ÎªBitmapÍ¼Æ¬ï¿½ï¿½Ê½
 			Bitmap bitmap = compressImage(ybitmap);
 			FileOutputStream b = null;
-			Long tsLong = System.currentTimeMillis()/1000;
+			Long tsLong = System.currentTimeMillis() / 1000;
 			String ts = tsLong.toString();
 			String mame = "" + ts;
 			String fileName = Keys.SDURL + "myImage/" + mame;
 			try {
 				b = new FileOutputStream(fileName);
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// °ÑÊý¾ÝÐ´ÈëÎÄ¼þ
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ä¼ï¿½
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} finally {
@@ -148,15 +159,15 @@ public class CJActivity extends Activity {
 			}
 
 			// ((ImageView) findViewById(R.id.imageView1_cj))
-			// .setImageBitmap(bitmap);// ½«Í¼Æ¬ÏÔÊ¾ÔÚImageViewÀï
+			// .setImageBitmap(bitmap);// ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Ê¾ï¿½ï¿½ImageViewï¿½ï¿½
 
 			arrayList1.add(bitmap);
 			arrayList2.add(fileName);
-			listview.setAdapter(adapter);
+			listview.setAdapter(adapter);// åˆ·æ–°ç…§ç‰‡åˆ—è¡¨
 		}
 
 	}
-
+//    ç‚¹å‡»å›¾ç‰‡åˆ—è¡¨æ˜¾ç¤ºçš„å¼¹å‡ºæ¡†
 	private void showPopupWindow(View view, final int id) {
 		View contentView = LayoutInflater.from(CJActivity.this).inflate(
 				R.layout.popupwindow_cj, null);
@@ -174,22 +185,24 @@ public class CJActivity extends Activity {
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
 				return false;
-				// ÕâÀïÈç¹û·µ»ØtrueµÄ»°£¬touchÊÂ¼þ½«±»À¹½Ø
-				// À¹½Øºó PopupWindowµÄonTouchEvent²»±»µ÷ÓÃ£¬ÕâÑùµã»÷Íâ²¿ÇøÓòÎÞ·¨dismiss
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½trueï¿½Ä»ï¿½ï¿½ï¿½touchï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				// ï¿½ï¿½ï¿½Øºï¿½
+				// PopupWindowï¿½ï¿½onTouchEventï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â²¿ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½dismiss
 			}
 		});
-		// Èç¹û²»ÉèÖÃPopupWindowµÄ±³¾°£¬ÎÞÂÛÊÇµã»÷Íâ²¿ÇøÓò»¹ÊÇBack¼ü¶¼ÎÞ·¨dismissµ¯¿ò
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PopupWindowï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½â²¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Backï¿½ï¿½ï¿½Þ·ï¿½dismissï¿½ï¿½ï¿½ï¿½
 		popupWindow.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.t0127c45a8e3188f139));
 		popupWindow.setWidth(150);
 		popupWindow.showAsDropDown(view, 100, 0);
 		String str[] = arrayList2.get(id).split("/");
-		text.setText(str[str.length-1]);
+		text.setText(str[str.length - 1]);
 		but1.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				// è°ƒç”¨ç³»ç»Ÿå·¥å…·æŸ¥çœ‹å›¾ç‰‡
 				String viewAction = "android.intent.action.VIEW";
 				Uri picUri = Uri.parse("file://" + arrayList2.get(id));
 				Intent lookPic = new Intent();
@@ -205,6 +218,7 @@ public class CJActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				// åˆ é™¤å›¾ç‰‡
 				File file = new File(arrayList2.get(id));
 				file.delete();
 				arrayList1.remove(id);
@@ -215,19 +229,19 @@ public class CJActivity extends Activity {
 		});
 	}
 
-	// Í¼Æ¬ÖÊÁ¿Ñ¹Ëõ
+	// åŽ‹ç¼©å›¾ç‰‡
 	private Bitmap compressImage(Bitmap image) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// ÖÊÁ¿Ñ¹Ëõ·½·¨£¬ÕâÀï100±íÊ¾²»Ñ¹Ëõ£¬°ÑÑ¹ËõºóµÄÊý¾Ý´æ·Åµ½baosÖÐ
+		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½100ï¿½ï¿½Ê¾ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½Åµï¿½baosï¿½ï¿½
 		int options = 100;
-		while (baos.toByteArray().length / 1024 > 100) { // Ñ­»·ÅÐ¶ÏÈç¹ûÑ¹ËõºóÍ¼Æ¬ÊÇ·ñ´óÓÚ100kb,´óÓÚ¼ÌÐøÑ¹Ëõ
-			baos.reset();// ÖØÖÃbaos¼´Çå¿Õbaos
-			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// ÕâÀïÑ¹Ëõoptions%£¬°ÑÑ¹ËõºóµÄÊý¾Ý´æ·Åµ½baosÖÐ
-			options -= 10;// Ã¿´Î¶¼¼õÉÙ10
+		while (baos.toByteArray().length / 1024 > 100) { // Ñ­ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½Ç·ï¿½ï¿½ï¿½ï¿½100kb,ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½
+			baos.reset();// ï¿½ï¿½ï¿½ï¿½baosï¿½ï¿½ï¿½ï¿½ï¿½baos
+			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½options%ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½Åµï¿½baosï¿½ï¿½
+			options -= 10;// Ã¿ï¿½Î¶ï¿½ï¿½ï¿½ï¿½ï¿½10
 		}
-		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// °ÑÑ¹ËõºóµÄÊý¾Ýbaos´æ·Åµ½ByteArrayInputStreamÖÐ
-		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// °ÑByteArrayInputStreamÊý¾ÝÉú³ÉÍ¼Æ¬
+		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½baosï¿½ï¿½Åµï¿½ByteArrayInputStreamï¿½ï¿½
+		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// ï¿½ï¿½ByteArrayInputStreamï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
 		return bitmap;
 	}
 
@@ -238,6 +252,7 @@ public class CJActivity extends Activity {
 		return true;
 	}
 
+	// è‡ªå®šä¹‰å›¾ç‰‡adapter
 	class MyAdapter extends BaseAdapter {
 
 		@Override
