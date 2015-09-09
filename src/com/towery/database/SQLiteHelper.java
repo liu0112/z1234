@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SQLiteHelper extends SQLiteOpenHelper {
 
 	public static int MYDATA_VERSION = 1;
-	public static String MYDATA_NAME = "mydata";
+	public static String MYDATA_NAME = "sdata";
 	public static String MYDATA_SETUP = "setup";
 
 	public SQLiteHelper(Context context) {
@@ -21,7 +21,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 
 		db.execSQL("create table if not exists setup"
-				+ "(_id integer primary key autoincrement,djms varchar(20),tzms varchar(20),dwrwq varchar(20),xzbz varchar(20),xsbz varchar(20),qhrwdw varchar(20),xspz varchar(20),sjkgx varchar(20),sjksj varchar(20))");
+				+ "(_id integer primary key autoincrement,userid varchar(20),djms varchar(20),tzms varchar(20),dwrwq varchar(20),xzbz varchar(20),xsbz varchar(20),qhrwdw varchar(20),xspz varchar(20),sjkgx varchar(20),sjksj varchar(20))");
 
 	}
 

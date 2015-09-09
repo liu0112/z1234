@@ -8,6 +8,13 @@ public class SetUp {
 
 	private int _id;
 	private String djms;
+	private String userid;
+	public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
 	private String tzms;
 	private String dwrwq;
 	private String xzbz;
@@ -76,18 +83,14 @@ public class SetUp {
 	public void setSjksj(String sjksj) {
 		this.sjksj = sjksj;
 	}
-	@Override
-	public String toString() {
-		return "SetUp [_id=" + _id + ", djms=" + djms + ", tzms=" + tzms
-				+ ", dwrwq=" + dwrwq + ", xzbz=" + xzbz + ", xsbz=" + xsbz
-				+ ", qhrwdw=" + qhrwdw + ", xspz=" + xspz + ", sjkgx=" + sjkgx
-				+ ", sjksj=" + sjksj + "]";
-	}
-	public SetUp(int _id, String djms, String tzms, String dwrwq, String xzbz,
-			String xsbz, String qhrwdw, String xspz, String sjkgx, String sjksj) {
+
+	public SetUp(int _id, String djms, String userid, String tzms,
+			String dwrwq, String xzbz, String xsbz, String qhrwdw, String xspz,
+			String sjkgx, String sjksj) {
 		super();
 		this._id = _id;
 		this.djms = djms;
+		this.userid = userid;
 		this.tzms = tzms;
 		this.dwrwq = dwrwq;
 		this.xzbz = xzbz;
@@ -96,6 +99,13 @@ public class SetUp {
 		this.xspz = xspz;
 		this.sjkgx = sjkgx;
 		this.sjksj = sjksj;
+	}
+	@Override
+	public String toString() {
+		return "SetUp [_id=" + _id + ", djms=" + djms + ", userid=" + userid
+				+ ", tzms=" + tzms + ", dwrwq=" + dwrwq + ", xzbz=" + xzbz
+				+ ", xsbz=" + xsbz + ", qhrwdw=" + qhrwdw + ", xspz=" + xspz
+				+ ", sjkgx=" + sjkgx + ", sjksj=" + sjksj + "]";
 	}
 	public SetUp() {
 		super();

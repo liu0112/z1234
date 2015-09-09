@@ -10,6 +10,7 @@ import android.database.Cursor;
 import com.towery.beans.userinfo;
 import com.towery.database.SDDataBaseHandler;
 import com.towery.database.SdCardDBHelper;
+import com.towery.utils.Utils;
 
 public class UserManager {
 	public Context context;
@@ -34,7 +35,7 @@ public class UserManager {
 
 	public List<userinfo> query() {
 		Cursor cursor = sDDataBaseHandler
-				.query(SdCardDBHelper.DATABASE_USERINFO);
+				.query(SdCardDBHelper.DATABASE_USERINFO,null,null,null,null,null,null,null);
 		ArrayList<userinfo> list = new ArrayList<userinfo>();
 		if (cursor == null) {
 
@@ -43,15 +44,14 @@ public class UserManager {
 
 		while (cursor.moveToNext()) {
 			userinfo userinfo = new userinfo();
-			userinfo.setUserid(cursor.getString(cursor.getColumnIndex("userid")));
-			userinfo.setUsername(cursor.getString(cursor
-					.getColumnIndex("username")));
-			userinfo.setUserpswd(cursor.getString(cursor
-					.getColumnIndex("userpswd")));
+			userinfo.setUserid(Utils.conversion(cursor.getBlob(cursor.getColumnIndex("userid"))));
+			userinfo.setUsername(Utils.conversion(cursor.getBlob(cursor.getColumnIndex("username"))));
+			userinfo.setUserpswd(Utils.conversion(cursor.getBlob(cursor.getColumnIndex("userpswd"))));
 			list.add(userinfo);
 		}
 
 		return list;
 
 	}
+
 }

@@ -20,19 +20,6 @@ public class SDDataBaseHandler {
 		dbHelper = new SdCardDBHelper(dbContext);
 	}
 
-	public void insert(List<userinfo> data) {
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		for (userinfo userinfo : data) {
-			ContentValues values = new ContentValues();
-			values.put("RecNo", userinfo.getRecNo());
-			values.put("userid", userinfo.getUserid());
-			values.put("userpswd", userinfo.getUserpswd());
-			values.put("username", userinfo.getUsername());
-			db.insert(SdCardDBHelper.DATABASE_USERINFO, null, values);
-		}
-		db.close();
-	}
-
 	public void insert2(String tableName, List<ContentValues> contentValueList) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		for (ContentValues values : contentValueList) {
@@ -41,44 +28,52 @@ public class SDDataBaseHandler {
 		db.close();
 	}
 
-	public List<userinfo> query1() {
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		ArrayList<userinfo> list = new ArrayList<userinfo>();
-		Cursor cursor = db.query(SdCardDBHelper.DATABASE_USERINFO, null, null,
-				null, null, null, null, null);
-
-		if (cursor.getCount() <= 0) {
-
-			return list;
-		}
-
-		while (cursor.moveToNext()) {
-			userinfo userinfo = new userinfo();
-			userinfo.setUserid(cursor.getString(cursor.getColumnIndex("userid")));
-			userinfo.setUsername(cursor.getString(cursor
-					.getColumnIndex("username")));
-			userinfo.setUserpswd(cursor.getString(cursor
-					.getColumnIndex("userpswd")));
-			list.add(userinfo);
-		}
-
-		db.close();
-		return list;
-
-	}
-
-	public Cursor query(String tableName) {
+	public Cursor query(String tableName, String[] columns, String selection,
+			String[] selectionArgs, String groupBy, String having,
+			String orderBy, String limit) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-		Cursor cursor = db.query(tableName, null, null, null, null, null, null,
-				null);
+		Cursor cursor = db.query(tableName, columns, selection, selectionArgs,
+				groupBy, having, orderBy, limit);
+		System.out.println(cursor.getCount()+"==============="+cursor.getCount());
 		if (cursor.getCount() <= 0) {
-
+			cursor.close();
+			db.close();
 			return null;
 		}
 
 		db.close();
 		return cursor;
 
+	}
+
+	public Cursor queryMax(String sql, String[] args) {
+
+		// "select max(t.questionid) from mediadata t where t.taskid = ?",
+		// new String[]{"20141231004130p"}
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+		Cursor cursor = db.rawQuery(sql, args);
+		if (cursor.getCount() <= 0) {
+			cursor.close();
+			db.close();
+			return null;
+		}
+
+		db.close();
+		return cursor;
+
+	}
+
+	public void delete(String tableName, String whereClause, String[] whereArgs) {
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		db.delete(tableName, whereClause, whereArgs);
+		db.close();
+	}
+
+	public void update(String table, ContentValues values, String whereClause, String[] whereArgs){
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		db.update(table, values, whereClause, whereArgs);
+		db.close();
 	}
 }

@@ -23,6 +23,7 @@ public class DataBaseHandler {
 		SQLiteDatabase db = sqLiteHelper.getWritableDatabase();
 		for (SetUp setUp : data) {
 			ContentValues values = new ContentValues();
+			values.put("userid", setUp.getUserid());
 			values.put("djms", setUp.getDjms());
 			values.put("tzms", setUp.getTzms());
 			values.put("dwrwq", setUp.getDwrwq());
@@ -50,6 +51,7 @@ public class DataBaseHandler {
 
 		while (cursor.moveToNext()) {
 			SetUp setUp  = new SetUp();
+			setUp.setDjms(cursor.getString(cursor.getColumnIndex("userid")));
 			setUp.setDjms(cursor.getString(cursor.getColumnIndex("djms")));
 			setUp.setTzms(cursor.getString(cursor.getColumnIndex("tzms")));
 			setUp.setDwrwq(cursor.getString(cursor.getColumnIndex("dwrwq")));
@@ -66,5 +68,10 @@ public class DataBaseHandler {
 		db.close();
 		return list;
 
+	}
+	public void update( ContentValues values, String whereClause, String[] whereArgs){
+		SQLiteDatabase db = sqLiteHelper.getWritableDatabase();
+		db.update(SQLiteHelper.MYDATA_SETUP, values, whereClause, whereArgs);
+		db.close();
 	}
 }

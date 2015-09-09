@@ -11,8 +11,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +33,8 @@
         </activity>
         <activity
             android:name="com.towery.activity.ZhuActivity"
-            android:label="@string/title_activity_zhu" >
+            android:label="@string/title_activity_zhu"
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name="com.towery.activity.CJActivity"
@@ -45,6 +49,19 @@
                 </category>
             </intent-filter>
         </service>
+
+        <activity
+            android:name="com.towery.activity.BJActivity"
+            android:label="@string/title_activity_bj" >
+        </activity>
+        <activity
+            android:name="com.towery.activity.RWLBActivity"
+            android:label="@string/title_activity_rwlb" >
+        </activity>
+        <activity
+            android:name="com.towery.activity.DZActivity"
+            android:label="@string/title_activity_dz" >
+        </activity>
     </application>
 
 </manifest>

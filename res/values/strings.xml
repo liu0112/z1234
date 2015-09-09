@@ -7,24 +7,33 @@
     <string name="title_activity_zhu">ZhuActivity</string>
     <string name="title_activity_cj">CJActivity</string>
     <string name="title_activity_tpyl">TPYLActivity</string>
-
-    
     <string name="title_login_welcome">欢迎使用POI采集系统</string>
     <string name="title_login_xtdl">系统登录</string>
-    <string name="title_login_user_name">用户编号</string>
-    <string name="title_login_user_pwd">密                 码</string>
-    <string name="title_login_task_num">任务编号</string>
+    <string name="title_login_user_name">用户编号:</string>
+    <string name="title_login_user_pwd">密 \u0020\u0020\u0020\u0020\u0020\u0020\u0020码:</string>
+    <string name="title_login_task_num">任务编号:</string>
     <string name="btn_login_ok">确定</string>
     <string name="btn_login_cancel">取消</string>
-    
-    
-    
     <string name="btn_zhu_menu">菜单</string>
     <string name="btn_zhu_remove">取消</string>
     <string name="but_zhu_set">高级</string>
-
     <string name="btn_CJ_Photograph">拍照</string>
     <string name="btn_CJ_finish">完成</string>
     <string name="btn_CJ_remark">备注</string>
-    
+    <string name="title_activity_bj">BjActivity</string>
+    <string name="title_bj_number">编号</string>
+    <string name="title_bj_remark">备注</string>
+    <string name="btn_cj_item_yulan">预览</string>
+    <string name="btn_cj_item_delete">删除</string>
+    <string name="btn_bj_menu">菜单</string>
+    <string name="btn_bj_back">返回</string>
+    <string name="title_activity_rwlb">RWLBActivity</string>
+    <string name="title_rw_taskname">名称</string>
+    <string name="title_rw_tasktype">类型</string>
+    <string name="title_rw_taskdesc">描述</string>
+    <string name="title_rw_taskstatus">状态</string>
+    <string name="title_activity_dz">DZActivity</string>
+    <string name="title_dz_dz">地址</string>
+    <string name="title_dz_zt">状态</string>
+
 </resources>

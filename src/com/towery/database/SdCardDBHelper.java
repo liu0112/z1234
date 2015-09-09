@@ -21,8 +21,12 @@ public class SdCardDBHelper extends SQLiteOpenHelper {
 	 * 表名
 	 **/
 	public static String DATABASE_USERINFO = "userinfo";
+	public static String DATABASE_TASKINFO = "taskinfo";
+	public static String DATABASE_MEDIADATA = "mediadata";
+	public static String DATABASE_COLLECTDATA = "collectdata";
 
 	/**
+	 * 
 	 * 构造函数
 	 * 
 	 * @param context
@@ -44,6 +48,12 @@ public class SdCardDBHelper extends SQLiteOpenHelper {
 			// 创建用户表(user)
 			db.execSQL("create table if not exists userinfo"
 					+ "(RecNo integer primary key autoincrement,userid varchar(20),userpswd varchar(20),username varchar(20))");
+			db.execSQL("create table if not exists taskinfo"
+					+ "(RecNo integer primary key autoincrement,taskid varchar(20),userid varchar(20),taskdesc varchar(20),tasktype varchar(20),taskstatus varchar(20),taskfinish varchar(20),taskname varchar(20))");
+			db.execSQL("create table if not exists mediadata"
+					+ "(RecNo integer primary key autoincrement,taskid varchar(20),userid varchar(20),questionid varchar(20),filename varchar(20),filepath varchar(100),taskname varchar(100))");
+			db.execSQL("create table if not exists collectdata"
+					+ "(RecNo integer primary key autoincrement,taskid varchar(20),questionid varchar(20),content varchar(20),answer varchar(20),x varchar(20),y varchar(20),GPSx varchar(20),GPSy varchar(20),GPStime varchar(20),remark varchar(20),syscollectuuid varchar(20))");
 			Log.e(TAG, "创建离线所需数据库表成功");
 		} catch (SQLException se) {
 			se.printStackTrace();

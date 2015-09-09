@@ -3,80 +3,67 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00CCFF"
+    android:background="@drawable/by"
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
+        android:layout_weight="2"
         android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textView1_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/title_login_welcome"
-            android:textSize="26sp" />
-
-        <TextView
-            android:id="@+id/textView2_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="@string/title_login_xtdl"
-            android:textSize="26sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#92b5e6"
         android:gravity="center"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp" >
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="20dp" >
 
             <TextView
                 android:id="@+id/textView_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_login_user_name"
-                android:textSize="26sp" />
+                android:textSize="24sp" />
 
             <Spinner
                 android:id="@+id/spinner1_main"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/spi" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:paddingTop="20dp" >
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp" >
 
             <TextView
                 android:id="@+id/textView3_user_pwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_login_user_pwd"
-                android:textSize="26sp" />
+                android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/editText1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="#ffffff"
                 android:ems="10"
                 android:inputType="textPassword" >
 
@@ -87,58 +74,51 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:paddingTop="20dp" >
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp" >
 
             <TextView
                 android:id="@+id/textView3_task_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_login_task_num"
-                android:textSize="26sp" />
+                android:textSize="24sp" />
 
             <Spinner
                 android:id="@+id/spinner2_main"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/spi" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="100dp"
-            android:paddingRight="100dp"
-            android:paddingTop="150dp" >
+            android:layout_marginTop="10dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp" >
 
             <Button
                 android:id="@+id/button1_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_login_ok"
-                android:textSize="26sp" />
-
-            <TextView
-                android:id="@+id/textView4_main"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="" />
+                android:background="@drawable/cd" />
 
             <Button
                 android:id="@+id/button2_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:text="@string/btn_login_cancel"
-                android:textSize="26sp" />
+                android:layout_weight="1"
+                android:background="@drawable/qx" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:orientation="vertical" >
     </LinearLayout>
 

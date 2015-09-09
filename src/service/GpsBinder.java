@@ -90,12 +90,12 @@ public class GpsBinder extends Binder implements IGpsBinder {
 		// 位置发生改变后调用
 		public void onLocationChanged(Location location) {
 			System.out.println("=============onLocationChanged");
-			updateWithNewLocation(location);
+			updateWithNewLocation1(location);
 		}
 
 		// provider被用户关闭后调用
 		public void onProviderDisabled(String provider) {
-			updateWithNewLocation(null);
+			updateWithNewLocation1(null);
 		}
 
 		// provider被用户开启后调用
@@ -115,6 +115,19 @@ public class GpsBinder extends Binder implements IGpsBinder {
 		Class<?>[] types = new Class[] { Location.class }; // 这个方法有1个参数
 		try {
 			Method m = mContext.getClass().getMethod("locationChanged", types);
+			if (m != null)
+				m.invoke(mContext, location);
+		} catch (Exception e) {
+			Log.e(GpsBinder.class.getName(), e.toString());
+		}
+		Log.i(GpsBinder.class.getName(), "location ischanged:" + location);
+	}
+	private void updateWithNewLocation1(Location location) {
+		System.out.println("=============updateWithNewLocation");
+		// 利用反射机制调用mContext的locationChanged方法
+		Class<?>[] types = new Class[] { Location.class }; // 这个方法有1个参数
+		try {
+			Method m = mContext.getClass().getMethod("locationChanged1", types);
 			if (m != null)
 				m.invoke(mContext, location);
 		} catch (Exception e) {
