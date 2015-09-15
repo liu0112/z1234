@@ -12,6 +12,8 @@ import com.towery.utils.Keys;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -70,15 +72,16 @@ public class BJActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onStart();
 		if (edit == null) {
-			System.out.println("---------------------");
 			init();
 			initframe();
 		} else {
 			query = collectDataManager.query(null, "taskid", taskid, orderBy);
 			if (query == null) {
+				i = -1;
 				return;
 			}
-			myAdpter.setSelectItem(-1);
+			myAdpter.setSelectItem(0);
+			i = 0;
 			myAdpter.notifyDataSetChanged();
 		}
 
@@ -102,7 +105,10 @@ public class BJActivity extends Activity {
 		if (query == null) {
 			return;
 		}
+
 		myAdpter = new MyAdpter();
+		myAdpter.setSelectItem(0);
+		i = 0;
 		listview.setAdapter(myAdpter);
 	}
 
@@ -115,7 +121,7 @@ public class BJActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (i < 0) {
-					Toast.makeText(BJActivity.this, "请选择对象……",
+					Toast.makeText(BJActivity.this, "未选中可操作地址",
 							Toast.LENGTH_SHORT).show();
 				} else {
 					showPopupWindow(v);
@@ -142,18 +148,20 @@ public class BJActivity extends Activity {
 					query = collectDataManager.query(null, "taskid", taskid,
 							"questionid");
 					orderBy = "questionid";
-					myAdpter.setSelectItem(-1);
+					myAdpter.setSelectItem(0);
+					i = 0;
 					myAdpter.notifyDataSetInvalidated();
 					ibut = 1;
 				} else {
 					query = collectDataManager.query(null, "taskid", taskid,
 							"questionid DESC");
 					orderBy = "questionid DESC";
-					myAdpter.setSelectItem(-1);
+					myAdpter.setSelectItem(0);
+					i = 0;
 					myAdpter.notifyDataSetInvalidated();
 					ibut = 0;
 				}
-				i = -1;
+
 			}
 		});
 		text2.setOnClickListener(new OnClickListener() {
@@ -167,18 +175,19 @@ public class BJActivity extends Activity {
 					query = collectDataManager.query(null, "taskid", taskid,
 							"remark");
 					orderBy = "remark";
-					myAdpter.setSelectItem(-1);
+					myAdpter.setSelectItem(0);
+					i = 0;
 					myAdpter.notifyDataSetInvalidated();
 					ibut = 1;
 				} else {
 					query = collectDataManager.query(null, "taskid", taskid,
 							"remark DESC");
 					orderBy = "remark DESC";
-					myAdpter.setSelectItem(-1);
+					myAdpter.setSelectItem(0);
+					i = 0;
 					myAdpter.notifyDataSetInvalidated();
 					ibut = 0;
 				}
-				i = -1;
 
 			}
 		});
@@ -252,19 +261,14 @@ public class BJActivity extends Activity {
 							ZhuActivity.class);
 					startActivity(intent);
 				} else if (adapter.getItem(arg2) == Keys.BJ_SC) {
-					String path = Keys.SDURL + "POI/photos/" + taskid + "/"
-							+ query.get(i).getQuestionid();
-					File file = new File(path);
-					delete(file);
-					mediadataManager.delete("questionid", new String[] { query
-							.get(i).getQuestionid() });
-					collectDataManager.delete("questionid",
-							new String[] { query.get(i).getQuestionid() });
-					query.remove(i);
-					if (query == null) {
-						return;
-					}
-					myAdpter.notifyDataSetChanged();
+					AlertDialog dialog = new AlertDialog.Builder(
+							BJActivity.this).create();
+					dialog.setTitle("删除");
+					dialog.setMessage(query.get(i).getQuestionid());
+					dialog.setButton("删除", listener);
+					dialog.setButton2("取消", listener);
+					dialog.show();
+
 				}
 				popupWindow2.dismiss();
 			}
@@ -284,6 +288,43 @@ public class BJActivity extends Activity {
 		popupWindow2.setWidth(360);
 		popupWindow2.showAsDropDown(view, 0, 3);
 	}
+
+	/** 监听对话框里面的button点击事件 */
+	DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+			case AlertDialog.BUTTON_POSITIVE:// "删除"按钮退出程序
+				String path = Keys.SDURL + "POI/photos/" + taskid + "/"
+						+ query.get(i).getQuestionid();
+				File file = new File(path);
+				delete(file);
+				mediadataManager.delete("questionid",
+						new String[] { query.get(i).getQuestionid() });
+				collectDataManager.delete("questionid", new String[] { query
+						.get(i).getQuestionid() });
+				query.remove(i);
+				if (query == null) {
+					return;
+				}
+				myAdpter.notifyDataSetChanged();
+				if (i == 0) {
+					if (query.size() < 1) {
+						i = -1;
+					}
+				} else {
+					i = i - 1;
+				}
+
+				break;
+			case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 	// 删除文件夹
 	public static void delete(File file) {

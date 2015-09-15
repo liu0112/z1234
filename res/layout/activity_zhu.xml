@@ -3,7 +3,6 @@
     android:id="@+id/LinearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_map"
     tools:context=".ZhuActivity" >
 
     <com.easymap.android.maps.v3.MapView
@@ -22,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="36sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/button1_zhu"

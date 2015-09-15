@@ -89,6 +89,8 @@ public class DZActivity extends Activity {
 			return;
 		}
 		myAdpter = new MyAdpter();
+		i = 0;
+		myAdpter.setSelectItem(0);
 		listview.setAdapter(myAdpter);
 	}
 
@@ -109,7 +111,7 @@ public class DZActivity extends Activity {
 			}
 		});
 		but2.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -126,17 +128,19 @@ public class DZActivity extends Activity {
 				if (ibut == 0) {
 					query = collectDataManager.query(null, "taskid", taskid,
 							"content");
-					myAdpter.setSelectItem(-1);
+					i = 0;
+					myAdpter.setSelectItem(0);
 					myAdpter.notifyDataSetInvalidated();
 					ibut = 1;
 				} else {
 					query = collectDataManager.query(null, "taskid", taskid,
 							"content DESC");
-					myAdpter.setSelectItem(-1);
+					i = 0;
+					myAdpter.setSelectItem(0);
 					myAdpter.notifyDataSetInvalidated();
 					ibut = 0;
 				}
-				i = -1;
+
 			}
 		});
 		text2.setOnClickListener(new OnClickListener() {
@@ -149,17 +153,19 @@ public class DZActivity extends Activity {
 				if (ibut == 0) {
 					query = collectDataManager.query(null, "taskid", taskid,
 							"answer");
-					myAdpter.setSelectItem(-1);
+					i = 0;
+					myAdpter.setSelectItem(0);
 					myAdpter.notifyDataSetInvalidated();
 					ibut = 1;
 				} else {
 					query = collectDataManager.query(null, "taskid", taskid,
 							"answer DESC");
-					myAdpter.setSelectItem(-1);
+					i = 0;
+					myAdpter.setSelectItem(0);
 					myAdpter.notifyDataSetInvalidated();
 					ibut = 0;
 				}
-				i = -1;
+
 			}
 		});
 		listview.setOnItemClickListener(new OnItemClickListener() {
@@ -197,7 +203,7 @@ public class DZActivity extends Activity {
 					intent.setClass(DZActivity.this, CJActivity.class);
 					edit.putString(Keys.SP_QUESTIONID, query.get(i)
 							.getQuestionid());
-					intent.putExtra("type", "ZHU");
+					intent.putExtra("type", "BJ");
 					intent.putExtra("x", "10000000");
 					intent.putExtra("y", "111111111111");
 					startActivity(intent);
@@ -250,7 +256,7 @@ public class DZActivity extends Activity {
 					intent.setClass(DZActivity.this, CJActivity.class);
 					edit.putString(Keys.SP_QUESTIONID, query.get(i)
 							.getQuestionid());
-					intent.putExtra("type", "ZHU");
+					intent.putExtra("type", "BJ");
 					intent.putExtra("x", "10000000");
 					intent.putExtra("y", "111111111111");
 					startActivity(intent);

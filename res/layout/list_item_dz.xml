@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@drawable/bj_border_ivory"
-        android:gravity="center"
+        android:gravity="center|left"
         android:text="@string/title_dz_dz" />
 
     <TextView

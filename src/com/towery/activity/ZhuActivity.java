@@ -1,30 +1,24 @@
 package com.towery.activity;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
-import java.util.ListIterator;
-
 import service.GpsService;
 import service.IGpsBinder;
-
 import com.easymap.android.maps.v3.EzMap;
 import com.easymap.android.maps.v3.EzMap.OnStatusChangeListener;
 import com.easymap.android.maps.v3.MapView;
-import com.easymap.android.maps.v3.geometry.CoordinateFilter;
 import com.easymap.android.maps.v3.geometry.GeoPoint;
-import com.easymap.android.maps.v3.layers.ezmap.EzMapSimpleTiledLayerGeog2010;
+import com.easymap.android.maps.v3.layers.ogc.WMTSLayer;
 import com.example.poi.R;
 import com.towery.beans.CollectData;
-import com.towery.beans.SetUp;
+import com.towery.beans.TaskInfo;
 import com.towery.database.DataBaseHandler;
 import com.towery.manager.CollectDataManager;
 import com.towery.manager.TaskInfoManager;
 import com.towery.utils.Keys;
 import com.towery.utils.Utils;
-
+import com.towery.utils.WMTSDisplay;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -55,6 +49,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ZhuActivity extends Activity implements OnStatusChangeListener {
@@ -69,11 +64,14 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 	private List<CollectData> query;
 	private Editor edit;
 	private String GPSoperation;
-	private int widch = 600;
+	private int widch = 200;
 	private MapView mapView;
 	private TaskInfoManager taskInfoManager;
 	private DataBaseHandler dataBaseHandler;
 	private String taskid;
+	private TextView text1;
+	private List<TaskInfo> taskinfoquery;
+	private String taskname;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,26 +79,21 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_zhu);
 
-		// mapView = (MapView) findViewById(R.id.MapView);
-		// if (mapView != null) {
-		// // 初始化许可，初始化许可包含两种方式，详细请看下述初始化许可
-		//
-		//
-		//
-		// File file = new File(Keys.SDURL
-		// + "EzMap/EzServiceClient4Android.lic");
-		// if (file.exists()) {
-		// System.out
-		// .println(Keys.SDURL + "EzMap/EzServiceClient4Android.lic");
-		// mapView.initLicenseAsDevelopement(Keys.SDURL
-		// + "EzMap/EzServiceClient4Android.lic");
-		// // 添加状态监听器
-		// mapView.setOnStatusChangeListener(this);
-		// // 执行地图创建过程
-		// mapView.onCreate(savedInstanceState);
-		// }
-		//
-		// }
+		mapView = (MapView) findViewById(R.id.MapView);
+		if (mapView != null) {
+			// 初始化许可，初始化许可包含两种方式，详细请看下述初始化许可
+			try {
+				InputStream is = this.getAssets().open(
+						"EzServiceClient4Android.lic");
+				mapView.initLicenseAsDevelopement(is);
+			} catch (IOException e) {
+				e.printStackTrace();
+
+			}
+			mapView.setOnStatusChangeListener(this);
+			mapView.onCreate(savedInstanceState);
+
+		}
 
 		init();
 		initframe();
@@ -117,32 +110,69 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 	@Override
 	public void onStatusChanged(STATUS status) {
 		// TODO Auto-generated method stub
+		if (status != STATUS.INITIALIZED) {
+			return;
+		}
 		EzMap map = mapView.getMap();
 		if (map == null) {
 			return;
 		}
+		
 		// 设置中心点
 		map.centerAt(new GeoPoint(116.39031, 39.91851), false);
 		// 设置初始级别
 		map.zoomTo(12, false);
-		// 构造图层
-		EzMapSimpleTiledLayerGeog2010 simple2010 = new EzMapSimpleTiledLayerGeog2010(
-				"http://172.25.18.164:12345/EzServer/Maps/BJshiliang", null,
-				Keys.SDURL + "FounderMap/");
+		// // 构造图层
+		// EzMapSimpleTiledLayerGeog2010 simple2010 = new
+		// EzMapSimpleTiledLayerGeog2010(
+		// "http://172.25.18.164:12345/EzServer/Maps/BJshiliang", null,
+		// Keys.SDURL + "FounderMap/");
+		WMTSLayer xxzyzx = WMTSDisplay.getLayer(WMTSDisplay.LAYER_SHILIANG);
 		// 添加图层
-		map.addLayer(simple2010);
-
+		map.addLayer(xxzyzx);
+		map.refreshMap();
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
+		mapView.onDestroy();
 		super.onDestroy();
 		// 页面消失GPS停止工作，
 		if (mBinder != null) {
 			this.unbindService(connection);
 			mBinder = null;// 释放mBinder,防止重复解绑定
 		}
+	}
+
+	@Override
+	public void onLowMemory() {
+		mapView.onLowMemory();
+		super.onLowMemory();
+	}
+
+	@Override
+	protected void onPause() {
+		mapView.onPause();
+		// if(this.locationDispaly!=null && this.locationDispaly.isStarted()){
+		// this.locationDispaly.stop(false);
+		// }
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		mapView.onResume();
+		// if(this.locationDispaly!=null && !this.locationDispaly.isStarted()){
+		// this.locationDispaly.start();
+		// }
+		super.onResume();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		mapView.onSaveInstanceState(outState);
+		super.onSaveInstanceState(outState);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -184,12 +214,33 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 			}
 		}
 	};
+	/** 监听对话框里面的button点击事件 */
+	DialogInterface.OnClickListener listener2 = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+			case AlertDialog.BUTTON_POSITIVE:// "退出"按钮退出程序
+				ContentValues values = new ContentValues();
+				values.put("taskfinish", Utils.putbyte("已完成"));
+				taskInfoManager.update(values, "taskid=?",
+						new String[] { sharedPreferences.getString(
+								Keys.SP_TASKID, "") });
+				break;
+			case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 	// 初始化
 	public void init() {
 
 		Intent i = new Intent(ZhuActivity.this, GpsService.class);
 		ZhuActivity.this.bindService(i, connection, Context.BIND_AUTO_CREATE);
+		text1 = (TextView) findViewById(R.id.textView1_zhu);
 		but1 = (Button) findViewById(R.id.button1_zhu);
 		but2 = (Button) findViewById(R.id.button2_zhu);
 
@@ -204,6 +255,13 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 		query = collectDataManager.query(new String[] { "questionid" },
 				"taskid", sharedPreferences.getString(Keys.SP_TASKID, ""),
 				"questionid DESC");
+		taskinfoquery = taskInfoManager.query();
+		for (int j = 0; j < taskinfoquery.size(); j++) {
+			if (taskinfoquery.get(j).getTaskid().equalsIgnoreCase(taskid)) {
+				text1.setText(taskinfoquery.get(j).getTaskname());
+				taskname = taskinfoquery.get(j).getTaskname();
+			}
+		}
 	}
 
 	// 事件操作
@@ -388,11 +446,17 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 					Intent i = new Intent(ZhuActivity.this, RWLBActivity.class);
 					startActivity(i);
 				} else if (adapter.getItem(arg2) == Keys.ZJ_WC) {
-					ContentValues values = new ContentValues();
-					values.put("taskfinish", Utils.putbyte("已完成"));
-					taskInfoManager.update(values, "taskid=?",
-							new String[] { sharedPreferences.getString(
-									Keys.SP_TASKID, "") });
+					AlertDialog dialog = new AlertDialog.Builder(
+							ZhuActivity.this).create();
+					// 设置对话框标题
+					dialog.setTitle("任务完成");
+					// 设置对话框消息
+					dialog.setMessage(taskname);
+					// 添加选择按钮并注册监听
+					dialog.setButton("确定", listener2);
+					dialog.setButton2("取消", listener2);
+					// 显示对话框
+					dialog.show();
 				}
 				popupWindow2.dismiss();
 
@@ -462,11 +526,18 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 					Intent i = new Intent(ZhuActivity.this, RWLBActivity.class);
 					startActivity(i);
 				} else if (adapter.getItem(arg2) == Keys.FQ_WC) {
-					ContentValues values = new ContentValues();
-					values.put("taskfinish", Utils.putbyte("已完成"));
-					taskInfoManager.update(values, "taskid=?",
-							new String[] { sharedPreferences.getString(
-									Keys.SP_TASKID, "") });
+					AlertDialog dialog = new AlertDialog.Builder(
+							ZhuActivity.this).create();
+					// 设置对话框标题
+					dialog.setTitle("任务完成");
+					// 设置对话框消息
+					dialog.setMessage(taskname);
+					// 添加选择按钮并注册监听
+					dialog.setButton("确定", listener2);
+					dialog.setButton2("取消", listener2);
+					// 显示对话框
+					dialog.show();
+
 				}
 				popupWindow2.dismiss();
 
@@ -536,11 +607,17 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 					Intent i = new Intent(ZhuActivity.this, RWLBActivity.class);
 					startActivity(i);
 				} else if (adapter.getItem(arg2) == Keys.BD_WC) {
-					ContentValues values = new ContentValues();
-					values.put("taskfinish", Utils.putbyte("已完成"));
-					taskInfoManager.update(values, "taskid=?",
-							new String[] { sharedPreferences.getString(
-									Keys.SP_TASKID, "") });
+					AlertDialog dialog = new AlertDialog.Builder(
+							ZhuActivity.this).create();
+					// 设置对话框标题
+					dialog.setTitle("任务完成");
+					// 设置对话框消息
+					dialog.setMessage(taskname);
+					// 添加选择按钮并注册监听
+					dialog.setButton("确定", listener2);
+					dialog.setButton2("取消", listener2);
+					// 显示对话框
+					dialog.show();
 				}
 				popupWindow2.dismiss();
 
@@ -600,12 +677,17 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 					startActivity(i);
 				} else if (adapter.getItem(arg2) == Keys.ZD_WC) {
 
-					ContentValues values = new ContentValues();
-					values.put("taskfinish", Utils.putbyte("已完成"));
-					taskInfoManager.update(values, "taskid=?",
-							new String[] { sharedPreferences.getString(
-									Keys.SP_TASKID, "") });
-
+					AlertDialog dialog = new AlertDialog.Builder(
+							ZhuActivity.this).create();
+					// 设置对话框标题
+					dialog.setTitle("任务完成");
+					// 设置对话框消息
+					dialog.setMessage(taskname);
+					// 添加选择按钮并注册监听
+					dialog.setButton("确定", listener2);
+					dialog.setButton2("取消", listener2);
+					// 显示对话框
+					dialog.show();
 				}
 				popupWindow2.dismiss();
 			}
