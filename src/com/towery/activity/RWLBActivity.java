@@ -75,6 +75,8 @@ public class RWLBActivity extends Activity {
 		infoManager = new TaskInfoManager(RWLBActivity.this);
 		query = infoManager.query();
 		myAdpter = new MyAdpter();
+		i=0;
+		myAdpter.setSelectItem(0);
 		list.setAdapter(myAdpter);
 	}
 

@@ -88,6 +88,11 @@ public class MediadataManager {
 		sDDataBaseHandler.delete(SdCardDBHelper.DATABASE_MEDIADATA, whereClause+"=?", whereArgs);
 		
 	}
+	public void update(ContentValues values, String whereClause,
+			String[] whereArgs) {
+		sDDataBaseHandler.update(SdCardDBHelper.DATABASE_MEDIADATA, values,
+				whereClause, whereArgs);
+	}
 	// public String queryMax(String s) {
 	// Cursor cursor = sDDataBaseHandler.queryMax(
 	// "select max(t.questionid) from mediadata t where t.taskid = ?",

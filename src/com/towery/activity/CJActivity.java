@@ -66,8 +66,8 @@ import com.towery.utils.Utils;
 
 public class CJActivity extends Activity {
 
-	private ArrayList<Bitmap> arrayList1;
-	private ArrayList<String> arrayList2;
+	private ArrayList<Bitmap> arrayList1 = new ArrayList<Bitmap>();;
+	private ArrayList<String> arrayList2 = new ArrayList<String>();;
 	private ListView listview;
 	private MyAdapter adapter;
 	private Button but1;
@@ -92,6 +92,13 @@ public class CJActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_cj);
+		ArrayList<Object> arrayList = (ArrayList<Object>) getLastNonConfigurationInstance();
+		if (arrayList == null) {
+
+		} else {
+			arrayList1 = (ArrayList<Bitmap>) arrayList.get(0);
+			arrayList2 = (ArrayList<String>) arrayList.get(1);
+		}
 		init();
 		initframe();
 	}
@@ -100,7 +107,15 @@ public class CJActivity extends Activity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		listview.setAdapter(adapter);
+
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		ArrayList<Object> arrayList = new ArrayList<Object>();
+		arrayList.add(arrayList1);
+		arrayList.add(arrayList2);
+		return arrayList;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -166,8 +181,6 @@ public class CJActivity extends Activity {
 
 		mediadataManager = new MediadataManager(CJActivity.this);
 		collectDataManager = new CollectDataManager(CJActivity.this);
-		arrayList1 = new ArrayList<Bitmap>();
-		arrayList2 = new ArrayList<String>();
 		SDfile = Keys.SDURL + "POI/photos/" + taskid + "/" + questionid + "/";
 		String sdStatus = Environment.getExternalStorageState();
 		if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // ���sd�Ƿ����
@@ -180,11 +193,10 @@ public class CJActivity extends Activity {
 			extraGPSx = intent.getStringExtra("GPSY");
 			String fileName = SDfile;
 			File file = new File(fileName);
-
 			if (!file.exists()) {
 				file.mkdirs();
 			}
-
+			listview.setAdapter(adapter);
 		} else if (type.equalsIgnoreCase("BJ")) {
 			edit.setText(intent.getStringExtra("remark"));
 			List<MediaData> query = mediadataManager.query("questionid",
@@ -201,7 +213,7 @@ public class CJActivity extends Activity {
 					file.mkdirs();
 				} else {
 					for (int i = 0; i < arrayList2.size(); i++) {
-						File f = new File(SDfile + arrayList2.get(i));
+						File f = new File(SDfile + arrayList2.get(i) + ".jpg");
 						if (f.exists()) {
 							Bitmap bm = BitmapFactory.decodeFile(f.toString());
 							arrayList1.add(bm);
@@ -284,7 +296,7 @@ public class CJActivity extends Activity {
 			Bitmap bitmap = compressImage(ybitmap);
 			FileOutputStream b = null;
 			String name = imageName();
-			String fileName = SDfile + temporary + "/" + name;
+			String fileName = SDfile + temporary + "/" + name + ".jpg";
 			File file = new File(SDfile + temporary);
 			if (!file.exists()) {
 				file.mkdirs();
@@ -320,84 +332,87 @@ public class CJActivity extends Activity {
 
 			arrayList1.add(bitmap);
 			arrayList2.add(name);
+			System.out.println("==================" + arrayList1.size()
+					+ arrayList2.size());
 			listview.setAdapter(adapter);// 刷新照片列表
 		}
 
 	}
 
-	// 点击图片列表显示的弹出框
-	private void showPopupWindow(View view, final int id) {
-		View contentView = LayoutInflater.from(CJActivity.this).inflate(
-				R.layout.popupwindow_cj, null);
-		TextView text = (TextView) contentView
-				.findViewById(R.id.textView1_pp_cj);
-		Button but1 = (Button) contentView.findViewById(R.id.button1_pp_cj);
-		Button but2 = (Button) contentView.findViewById(R.id.button2_pp_cj);
-
-		final PopupWindow popupWindow = new PopupWindow(contentView,
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
-		popupWindow.setTouchable(true);
-		popupWindow.setTouchInterceptor(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				// TODO Auto-generated method stub
-				return false;
-				// ��������true�Ļ���touch�¼���������
-				// ���غ�
-				// PopupWindow��onTouchEvent�������ã��������ⲿ�����޷�dismiss
-			}
-		});
-		// �������PopupWindow�ı����������ǵ���ⲿ������Back���޷�dismiss����
-		popupWindow.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.bg_popwindow));
-		popupWindow.setWidth(420);
-		popupWindow.showAsDropDown(view, 100, 0);
-		// String str[] = arrayList2.get(id).split("/");
-		text.setText(arrayList2.get(id) + "jpg");
-		but1.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				// 调用系统工具查看图片
-				String viewAction = "android.intent.action.VIEW";
-				String uri;
-				File file = new File(SDfile + temporary + "/"
-						+ arrayList2.get(id));
-				if (file.exists()) {
-					uri = "file://" + SDfile + temporary + "/"
-							+ arrayList2.get(id);
-				} else {
-					uri = "file://" + SDfile + arrayList2.get(id);
-				}
-				Uri picUri = Uri.parse(uri);
-				Intent lookPic = new Intent();
-				lookPic.setAction(viewAction);
-				lookPic.setDataAndType(picUri, "image/*");
-				lookPic.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-						| Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(lookPic);
-			}
-		});
-		but2.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				// 删除图片
-				String path = SDfile + temporary + "/" + arrayList2.get(id);
-				File file = new File(path);
-				if (file.exists()) {
-					file.delete();
-				}
-				arrayList1.remove(id);
-				arrayList2.remove(id);
-				listview.setAdapter(adapter);
-				popupWindow.dismiss();
-			}
-		});
-	}
+	// // 点击图片列表显示的弹出框
+	// private void showPopupWindow(View view, final int id) {
+	// View contentView = LayoutInflater.from(CJActivity.this).inflate(
+	// R.layout.popupwindow_cj, null);
+	// TextView text = (TextView) contentView
+	// .findViewById(R.id.textView1_pp_cj);
+	// Button but1 = (Button) contentView.findViewById(R.id.button1_pp_cj);
+	// Button but2 = (Button) contentView.findViewById(R.id.button2_pp_cj);
+	//
+	// final PopupWindow popupWindow = new PopupWindow(contentView,
+	// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+	// popupWindow.setTouchable(true);
+	// popupWindow.setTouchInterceptor(new OnTouchListener() {
+	//
+	// @Override
+	// public boolean onTouch(View v, MotionEvent event) {
+	// // TODO Auto-generated method stub
+	// return false;
+	// // ��������true�Ļ���touch�¼���������
+	// // ���غ�
+	// // PopupWindow��onTouchEvent�������ã��������ⲿ�����޷�dismiss
+	// }
+	// });
+	// // �������PopupWindow�ı����������ǵ���ⲿ������Back���޷�dismiss����
+	// popupWindow.setBackgroundDrawable(getResources().getDrawable(
+	// R.drawable.bg_popwindow));
+	// popupWindow.setWidth(420);
+	// popupWindow.showAsDropDown(view, 100, 0);
+	// // String str[] = arrayList2.get(id).split("/");
+	// text.setText(arrayList2.get(id) + "jpg");
+	// but1.setOnClickListener(new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View v) {
+	// // TODO Auto-generated method stub
+	// // 调用系统工具查看图片
+	// String viewAction = "android.intent.action.VIEW";
+	// String uri;
+	// File file = new File(SDfile + temporary + "/"
+	// + arrayList2.get(id));
+	// if (file.exists()) {
+	// uri = "file://" + SDfile + temporary + "/"
+	// + arrayList2.get(id);
+	// } else {
+	// uri = "file://" + SDfile + arrayList2.get(id);
+	// }
+	// System.out.println("========="+uri);
+	// Uri picUri = Uri.parse(uri);
+	// Intent lookPic = new Intent();
+	// lookPic.setAction(viewAction);
+	// lookPic.setDataAndType(picUri, "image/*");
+	// lookPic.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+	// | Intent.FLAG_ACTIVITY_NEW_TASK);
+	// startActivity(lookPic);
+	// }
+	// });
+	// but2.setOnClickListener(new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View v) {
+	// // TODO Auto-generated method stub
+	// // 删除图片
+	// String path = SDfile + temporary + "/" + arrayList2.get(id);
+	// File file = new File(path);
+	// if (file.exists()) {
+	// file.delete();
+	// }
+	// arrayList1.remove(id);
+	// arrayList2.remove(id);
+	// listview.setAdapter(adapter);
+	// popupWindow.dismiss();
+	// }
+	// });
+	// }
 
 	// 图片命名方法
 	public String imageName() {
@@ -452,7 +467,7 @@ public class CJActivity extends Activity {
 			// 图片文件存储
 			for (int i = 0; i < arrayList1.size(); i++) {
 				FileOutputStream b = null;
-				String fileName = SDfile + arrayList2.get(i);
+				String fileName = SDfile + arrayList2.get(i) + ".jpg";
 				File file = new File(SDfile);
 				if (!file.exists()) {
 					file.mkdirs();
@@ -476,7 +491,7 @@ public class CJActivity extends Activity {
 			// 图片文件存储
 			for (int i = 0; i < arrayList1.size(); i++) {
 				FileOutputStream b = null;
-				String fileName = SDfile + arrayList2.get(i);
+				String fileName = SDfile + arrayList2.get(i) + ".jpg";
 				File file = new File(SDfile);
 				if (!file.exists()) {
 					file.mkdirs();
@@ -502,7 +517,7 @@ public class CJActivity extends Activity {
 			collectDataManager.update(values, "questionid=?",
 					new String[] { questionid });
 			mediadataManager.delete("questionid", new String[] { questionid });
-			ArrayList<MediaData> arrayListmedia = new ArrayList<MediaData>();
+			ArrayList<MediaData> arrayListmedia = new ArrayList<MediaData>();			
 			for (int i = 0; i < arrayList2.size(); i++) {
 				MediaData mediaData = new MediaData();
 				mediaData.setTaskid(sharedPreferences.getString(Keys.SP_TASKID,
@@ -612,14 +627,15 @@ public class CJActivity extends Activity {
 							String viewAction = "android.intent.action.VIEW";
 							String uri;
 							File file = new File(SDfile + temporary + "/"
-									+ arrayList2.get(position));
+									+ arrayList2.get(position) + ".jpg");
 							if (file.exists()) {
 								uri = "file://" + SDfile + temporary + "/"
-										+ arrayList2.get(position);
+										+ arrayList2.get(position) + ".jpg";
 							} else {
 								uri = "file://" + SDfile
-										+ arrayList2.get(position);
+										+ arrayList2.get(position) + ".jpg";
 							}
+							System.out.println("==========" + uri);
 							Uri picUri = Uri.parse(uri);
 							Intent lookPic = new Intent();
 							lookPic.setAction(viewAction);
@@ -645,7 +661,7 @@ public class CJActivity extends Activity {
 							arrayList1.remove(position);
 							arrayList2.remove(position);
 							// listview.setAdapter(adapter);
-							onStart();
+							adapter.notifyDataSetChanged();
 						}
 					});
 			return view;
