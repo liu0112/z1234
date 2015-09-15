@@ -5,11 +5,6 @@ import java.io.InputStream;
 import java.util.List;
 import service.GpsService;
 import service.IGpsBinder;
-import com.easymap.android.maps.v3.EzMap;
-import com.easymap.android.maps.v3.EzMap.OnStatusChangeListener;
-import com.easymap.android.maps.v3.MapView;
-import com.easymap.android.maps.v3.geometry.GeoPoint;
-import com.easymap.android.maps.v3.layers.ogc.WMTSLayer;
 import com.example.poi.R;
 import com.towery.beans.CollectData;
 import com.towery.beans.TaskInfo;
@@ -51,6 +46,13 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.easymap.android.maps.v3.EzMap;
+import com.easymap.android.maps.v3.EzMap.OnStatusChangeListener;
+import com.easymap.android.maps.v3.EzMap.OnStatusChangeListener.STATUS;
+import com.easymap.android.maps.v3.MapView;
+import com.easymap.android.maps.v3.geometry.GeoPoint;
+import com.easymap.android.maps.v3.layers.ogc.WMTSLayer;
+
 
 public class ZhuActivity extends Activity implements OnStatusChangeListener {
 
@@ -72,6 +74,7 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 	private TextView text1;
 	private List<TaskInfo> taskinfoquery;
 	private String taskname;
+	private EzMap ezMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,43 +97,37 @@ public class ZhuActivity extends Activity implements OnStatusChangeListener {
 			mapView.onCreate(savedInstanceState);
 
 		}
-
-		init();
-		initframe();
+//
+//		init();
+//		initframe();
 	}
 
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		init();
-		initframe();
+//		init();
+//		initframe();
 	}
 
 	@Override
 	public void onStatusChanged(STATUS status) {
 		// TODO Auto-generated method stub
-		if (status != STATUS.INITIALIZED) {
-			return;
-		}
-		EzMap map = mapView.getMap();
-		if (map == null) {
+		if(status!=STATUS.INITIALIZED ){
 			return;
 		}
 		
-		// 设置中心点
-		map.centerAt(new GeoPoint(116.39031, 39.91851), false);
-		// 设置初始级别
-		map.zoomTo(12, false);
-		// // 构造图层
-		// EzMapSimpleTiledLayerGeog2010 simple2010 = new
-		// EzMapSimpleTiledLayerGeog2010(
-		// "http://172.25.18.164:12345/EzServer/Maps/BJshiliang", null,
-		// Keys.SDURL + "FounderMap/");
+		ezMap = mapView.getMap();
+		if(ezMap == null) {
+			return;
+		}
+		//设置初始级别
+		ezMap.zoomTo(12, false);
+		//设置中心
+		ezMap.centerAt(new GeoPoint(503371.925546077, 313907.323431658), false);
 		WMTSLayer xxzyzx = WMTSDisplay.getLayer(WMTSDisplay.LAYER_SHILIANG);
-		// 添加图层
-		map.addLayer(xxzyzx);
-		map.refreshMap();
+		ezMap.addLayer(xxzyzx);
+		ezMap.refreshMap();
 	}
 
 	@Override
